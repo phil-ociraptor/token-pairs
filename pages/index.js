@@ -1,7 +1,12 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from "next/head";
+import { useState } from "react";
+import styles from "../styles/Home.module.css";
+import tokenList from "../data/coingecko.json";
+import { processInputPair, processInputAddresses } from "../utils/pairs";
 
 export default function Home() {
+  const [pairsInput, setPairsInput] = useState("");
+  const [addressesInput, setAddressesInput] = useState("");
   return (
     <div className={styles.container}>
       <Head>
@@ -10,56 +15,32 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>Token Pairs</h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
+          Exhibit A: Convert a list of token pairs into JSON i.e.{" "}
+          <code className={styles.code}>DAI-WETH,USDC/MATIC</code>
         </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <input onChange={(e) => setPairsInput(e.target.value)}></input>
+        <div>
+          {JSON.stringify(processInputPair(pairsInput, tokenList.tokens))}
+        </div>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        <p className={styles.description}>
+          Exhibit B: Check a list of addresses to see if valid i.e.{" "}
+          <code className={styles.code}>
+            [["0x6b175474e89094c44da98b954eedeac495271d0f","0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"],["0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48","0x7d1afa7b718fb893db30a3abc0cfc608aacfebb0"]]
+          </code>
+        </p>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <input onChange={(e) => setAddressesInput(e.target.value)}></input>
+        <div>
+          {JSON.stringify(
+            processInputAddresses(addressesInput, tokenList.tokens)
+          )}
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
     </div>
-  )
+  );
 }
