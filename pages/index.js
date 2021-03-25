@@ -1,12 +1,21 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../styles/Home.module.css";
-import tokenList from "../data/coingecko.json";
+import coingeckoList from "../data/coingecko.json";
 import { processInputPair, processInputAddresses } from "../utils/pairs";
 
 export default function Home() {
   const [pairsInput, setPairsInput] = useState("");
   const [addressesInput, setAddressesInput] = useState("");
+  const [tokenList, setTokenList] = useState(coingeckoList.tokens); //coingecko as fallback
+  useEffect(async () => {
+    const res = await fetch("https://api.0x.org/swap/v1/tokens").then((res) =>
+      res.json()
+    );
+    // 0x api response has a "records" field. Tokenlists uses a "tokens" field
+    setTokenList(res.records);
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -21,10 +30,16 @@ export default function Home() {
           Exhibit A: Convert a list of token pairs into JSON i.e.{" "}
           <code className={styles.code}>DAI-WETH,USDC/MATIC</code>
         </p>
+        {/ETH/.test(pairsInput) && (
+          <p className={styles.warning}>
+            Make sure you are using WETH instead of ETH for ERC-20s
+          </p>
+        )}
 
         <input onChange={(e) => setPairsInput(e.target.value)}></input>
         <div>
-          {JSON.stringify(processInputPair(pairsInput, tokenList.tokens))}
+          {pairsInput &&
+            JSON.stringify(processInputPair(pairsInput, tokenList))}
         </div>
 
         <p className={styles.description}>
@@ -36,9 +51,8 @@ export default function Home() {
 
         <input onChange={(e) => setAddressesInput(e.target.value)}></input>
         <div>
-          {JSON.stringify(
-            processInputAddresses(addressesInput, tokenList.tokens)
-          )}
+          {addressesInput &&
+            JSON.stringify(processInputAddresses(addressesInput, tokenList))}
         </div>
       </main>
     </div>

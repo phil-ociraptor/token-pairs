@@ -9,7 +9,8 @@ const mapAddressesToTokens = (addresses, tokenList) => {
 };
 
 const mapTokensToAddresses = (tokens, tokenList) => {
-  const tokenMap = tokenList.reduce((acc, curr) => {
+  const list = tokenList || [];
+  const tokenMap = list.reduce((acc, curr) => {
     acc[curr.symbol] = curr;
     return acc;
   }, {});

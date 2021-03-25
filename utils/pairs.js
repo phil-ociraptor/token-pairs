@@ -17,8 +17,8 @@ const processInputAddresses = (inputAddresses, tokenList) => {
   try {
     pairs = JSON.parse(inputAddresses);
   } catch (e) {
-    console.log(e);
-    console.log(inputAddresses);
+    console.error(e);
+    console.log("failed parsing this input ->", inputAddresses);
     pairs = [];
   }
   return pairs.map((p) => mapAddressesToTokens(p, tokenList));
