@@ -10,13 +10,16 @@ export default function Home() {
   const [tokenList, setTokenList] = useState(coingeckoList.tokens); //coingecko as fallback
 
   // Enable this code to restrict token set to only 0x API approved stuff
-  // useEffect(async () => {
-  //   const res = await fetch("https://api.0x.org/swap/v1/tokens").then((res) =>
-  //     res.json()
-  //   );
-  //   // 0x api response has a "records" field. Tokenlists uses a "tokens" field
-  //   setTokenList(res.records);
-  // }, []);
+  useEffect(async () => {
+    const coingeckoUrl = "https://tokens.coingecko.com/uniswap/all.json";
+    const zeroExUrl = "https://api.0x.org/swap/v1/tokens";
+    const res = await fetch(coingeckoUrl).then((res) => res.json());
+
+    // 0x api response has a "records" field. Tokenlists uses a "tokens" field
+    // i.e. for coingeckoUrl use res.tokens
+    // i.e. for zeroExUrl use res.records
+    setTokenList(res.tokens);
+  }, []);
 
   return (
     <div className={styles.container}>
