@@ -8,13 +8,15 @@ export default function Home() {
   const [pairsInput, setPairsInput] = useState("");
   const [addressesInput, setAddressesInput] = useState("");
   const [tokenList, setTokenList] = useState(coingeckoList.tokens); //coingecko as fallback
-  useEffect(async () => {
-    const res = await fetch("https://api.0x.org/swap/v1/tokens").then((res) =>
-      res.json()
-    );
-    // 0x api response has a "records" field. Tokenlists uses a "tokens" field
-    setTokenList(res.records);
-  }, []);
+
+  // Enable this code to restrict token set to only 0x API approved stuff
+  // useEffect(async () => {
+  //   const res = await fetch("https://api.0x.org/swap/v1/tokens").then((res) =>
+  //     res.json()
+  //   );
+  //   // 0x api response has a "records" field. Tokenlists uses a "tokens" field
+  //   setTokenList(res.records);
+  // }, []);
 
   return (
     <div className={styles.container}>
